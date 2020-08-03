@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect} from 'react';
 import './App.css';
+import ToDoList from "./components/ToDoList";
+import AddToDo from "./components/AddToDo";
+import Header from "./components/Header";
+import {Route, Switch} from "react-router-dom";
+import Autorization from "./components/Autorization";
+import {connect} from "react-redux";
+import {getAuthThunk} from "./redux/actions";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App({getAuthThunk}) {
+
+    useEffect(() => {
+        getAuthThunk()
+    }, [])
+
+    return (
+        <>
+            <Header/>
+            <div className="container">
+                <Switch>
+                    <Route exact path={'/'}
+                           render={() => <ToDoList/>}/>
+                    <Route exact path={'/addtodo'}
+                           render={() => <AddToDo/>}/>
+                    <Route exact path={'/auth'}
+                           render={() => <Autorization/>}/>
+                </Switch>
+            </div>
+        </>
+    );
 }
 
-export default App;
+export default connect(null, {getAuthThunk})(App)
