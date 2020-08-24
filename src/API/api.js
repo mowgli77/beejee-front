@@ -1,9 +1,8 @@
 import axios from "axios";
 
 export const instance = axios.create({
-    baseURL: 'https://rio0n.sse.codesandbox.io/api'
+    baseURL: 'https://nj9eq.sse.codesandbox.io/api'
 })
-
 export const getToDoAPI = (page, count) => {
     return instance.get(`/todos?page=${page}&count=${count}`)
 }
