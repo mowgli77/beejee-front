@@ -1,15 +1,17 @@
-import React, {useState} from "react";
+import React from "react";
 
 
-export const Pagination = ({toDosCount, pageSize, onChangedPage, ...props}) => {
+export const Pagination = ({toDosCount, pageSize, onChangedPage, currentPage, setCurrentPage, ...props}) => {
 
     const pagesCount = Math.ceil(toDosCount / pageSize);
+    if (pagesCount < currentPage && currentPage !== 1) {
+        setCurrentPage(currentPage-1)
+    }
 
     const pages = [];
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i)
     }
-    const [currentPage, setCurrentPage] = useState(1)
 
     const changePage = (p) => {
         onChangedPage(p - 1)

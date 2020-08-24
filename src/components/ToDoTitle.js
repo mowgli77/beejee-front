@@ -1,40 +1,27 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-const ToDoTitle = ({sortNamesByABC, sortNamesByZYX,  sortEmailsByABC, sortToDosByABC, sortEmailsByZYX, sortToDosByZYX, isAuth}) => {
-    const [isNamesSorted, setIsNamesSorted] = useState(null)
-    const [isEmailSorted, setIsEmailSorted] = useState(null)
-    const [isToDoSorted, setIsToDoSorted] = useState(null)
+const ToDoTitle = ({isAuth, isNamesSorted, isEmailSorted, isToDoSorted, getSortNamesABCThunk, currentPage, getSortNamesXYZThunk, getSortEmailABCThunk,
+                       getSortEmailXYZThunk, getSortTodosABCThunk, getSortTodosXYZThunk}) => {
+
     const sortNames = () => {
-        setIsEmailSorted(null)
-        setIsToDoSorted(null)
         if (!isNamesSorted) {
-        sortNamesByABC()
-            setIsNamesSorted(1)
+            getSortNamesABCThunk(currentPage-1)
         } else if (isNamesSorted === 1) {
-            sortNamesByZYX()
-            setIsNamesSorted(0)
+            getSortNamesXYZThunk(currentPage-1)
         }
     }
     const sortEmails = () => {
-        setIsNamesSorted(null)
-        setIsToDoSorted(null)
         if (!isEmailSorted) {
-            sortEmailsByABC()
-            setIsEmailSorted(1)
+            getSortEmailABCThunk(currentPage-1)
         } else if (isEmailSorted === 1) {
-            sortEmailsByZYX()
-            setIsEmailSorted(0)
+            getSortEmailXYZThunk(currentPage-1)
         }
     }
     const sortToDos = () => {
-        setIsNamesSorted(null)
-        setIsEmailSorted(null)
         if (!isToDoSorted) {
-            sortToDosByABC()
-            setIsToDoSorted(1)
+            getSortTodosABCThunk(currentPage-1)
         } else if (isToDoSorted === 1) {
-            sortToDosByZYX()
-            setIsToDoSorted(0)
+            getSortTodosXYZThunk(currentPage-1)
         }
     }
 

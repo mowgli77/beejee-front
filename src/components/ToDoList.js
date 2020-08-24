@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {connect} from "react-redux";
 import ToDo from "./ToDo";
 import {
@@ -6,35 +6,33 @@ import {
     changeStatusThunk,
     confirmAuthThunk,
     deleteToDoThunk,
+    getSortEmailABCThunk,
+    getSortEmailXYZThunk,
+    getSortNamesABCThunk,
+    getSortNamesXYZThunk,
+    getSortTodosABCThunk,
+    getSortTodosXYZThunk,
     getToDosCountThunk,
-    getToDosThunk, showAlert,
-    sortEmailsByABC,
-    sortEmailsByZYX,
-    sortNamesByABC,
-    sortNamesByZYX,
-    sortToDosByABC,
-    sortToDosByZYX
+    getToDosThunk,
+    setCurrentPage,
+    showAlert
 } from "../redux/actions";
 import ToDoTitle from "./ToDoTitle";
 import Pagination from "./Pagination";
 
 
-const ToDoList = ({todos, getToDosThunk, deleteToDoThunk, getToDosCountThunk, pageSize, toDosCount, sortNamesByABC, isAuth, showAlert,
-                      sortNamesByZYX, sortEmailsByABC, sortToDosByABC, sortEmailsByZYX, sortToDosByZYX, alert, changeStatusThunk, adminChangedThunk}) => {
-
-    const [todosPage, setTodosPage] = useState([...todos].splice(0, 3))
+const ToDoList = ({todos, getToDosThunk, deleteToDoThunk, getToDosCountThunk, pageSize, toDosCount, isAuth, showAlert, currentPage, setCurrentPage, alert, changeStatusThunk, adminChangedThunk,
+                      isNamesSorted, isEmailSorted, isToDoSorted, getSortNamesABCThunk, getSortNamesXYZThunk, getSortEmailABCThunk, getSortEmailXYZThunk,
+                      getSortTodosABCThunk, getSortTodosXYZThunk
+                  }) => {
 
     useEffect(() => {
-        getToDosThunk()
+        getToDosThunk(currentPage - 1)
         getToDosCountThunk()
-    }, [])
+    }, [currentPage])
 
-    useEffect(() => {
-        setTodosPage([...todos].splice(0, 3))
-    }, [todos])
-
-    const onChangedPage = (currentPage) => {
-        setTodosPage([...todos].splice(currentPage * 3, 3))
+    const onChangedPage = (page) => {
+        getToDosThunk(page)
     }
 
     return (
@@ -44,17 +42,21 @@ const ToDoList = ({todos, getToDosThunk, deleteToDoThunk, getToDosCountThunk, pa
             </div>}
             <table className="table table-striped align-middle table-hover mt-5 mb-5 ">
                 <thead className={"thead-dark"}>
-                <ToDoTitle sortNamesByABC={sortNamesByABC}
-                           sortNamesByZYX={sortNamesByZYX}
-                           sortEmailsByABC={sortEmailsByABC}
-                           sortToDosByABC={sortToDosByABC}
-                           sortEmailsByZYX={sortEmailsByZYX}
-                           sortToDosByZYX={sortToDosByZYX}
-                           isAuth={isAuth}
+                <ToDoTitle isAuth={isAuth}
+                           isNamesSorted={isNamesSorted}
+                           isEmailSorted={isEmailSorted}
+                           isToDoSorted={isToDoSorted}
+                           getSortNamesABCThunk={getSortNamesABCThunk}
+                           currentPage={currentPage}
+                           getSortNamesXYZThunk={getSortNamesXYZThunk}
+                           getSortEmailABCThunk={getSortEmailABCThunk}
+                           getSortEmailXYZThunk={getSortEmailXYZThunk}
+                           getSortTodosABCThunk={getSortTodosABCThunk}
+                           getSortTodosXYZThunk={getSortTodosXYZThunk}
                 />
                 </thead>
                 <tbody>
-                {todosPage.map(t => <ToDo todoItem={t}
+                {todos.map(t => <ToDo todoItem={t}
                                           key={t.id}
                                           deleteToDoThunk={deleteToDoThunk}
                                           changeStatusThunk={changeStatusThunk}
@@ -64,10 +66,12 @@ const ToDoList = ({todos, getToDosThunk, deleteToDoThunk, getToDosCountThunk, pa
                 />)}
                 </tbody>
             </table>
-            {todosPage.length == 0 && <h1 style={{textAlign: 'center'}}>You don`t have tasks</h1>}
+            {todos.length == 0 && <h1 style={{textAlign: 'center'}}>You don`t have tasks</h1>}
             <Pagination toDosCount={toDosCount}
                         pageSize={pageSize}
                         onChangedPage={onChangedPage}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
             />
         </div>
     );
@@ -79,19 +83,24 @@ const mapStateToProps = (state) => ({
     pageSize: state.toDoDatas.pageSize,
     alert: state.toDoDatas.alert,
     auth: state.toDoDatas.auth,
-    isAuth: state.toDoDatas.isAuth
+    isAuth: state.toDoDatas.isAuth,
+    currentPage: state.toDoDatas.currentPage,
+    isNamesSorted: state.toDoDatas.isNamesSorted,
+    isEmailSorted: state.toDoDatas.isEmailSorted,
+    isToDoSorted: state.toDoDatas.isToDoSorted
 })
 export default connect(mapStateToProps, {getToDosThunk,
     deleteToDoThunk,
     getToDosCountThunk,
     confirmAuthThunk,
-    sortNamesByABC,
-    sortNamesByZYX,
-    sortEmailsByABC,
-    sortToDosByABC,
-    sortEmailsByZYX,
-    sortToDosByZYX,
     changeStatusThunk,
     adminChangedThunk,
-    showAlert
+    showAlert,
+    setCurrentPage,
+    getSortNamesABCThunk,
+    getSortNamesXYZThunk,
+    getSortEmailABCThunk,
+    getSortEmailXYZThunk,
+    getSortTodosABCThunk,
+    getSortTodosXYZThunk
 })(ToDoList)

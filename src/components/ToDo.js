@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 
+
 const ToDo = ({todoItem, deleteToDoThunk, changeStatusThunk, adminChangedThunk, isAuth, showAlert}) => {
 
     const [reductMode, setReductMode] = useState(false)
@@ -14,11 +15,14 @@ const ToDo = ({todoItem, deleteToDoThunk, changeStatusThunk, adminChangedThunk, 
     }
     const saveAdminChanges = () => {
         if (todoItem.todo !== inputValue) {
-            adminChangedThunk(todoItem.id, inputValue, 1, isAuth)
+            adminChangedThunk(todoItem.id, inputValue, 1)
             setReductMode(false)
         } else {
             showAlert('There are no any changes')
         }
+    }
+    const deleteTodo = () => {
+        deleteToDoThunk(todoItem.id)
     }
 
 
@@ -39,7 +43,7 @@ const ToDo = ({todoItem, deleteToDoThunk, changeStatusThunk, adminChangedThunk, 
             <td className={"text-center"}><input type={'checkbox'} checked={todoItem.changed}/>
             </td>
             {isAuth == true && <td>
-                <button className={"btn btn-dark"} onClick={() => deleteToDoThunk(todoItem.id)}>Delete Todo</button>
+                <button className={"btn btn-dark"} onClick={deleteTodo}>Delete Todo</button>
             </td>}
         </tr>
     );

@@ -12,16 +12,21 @@ import {
     SORT_NAMES_BY_ZYX,
     SORT_TODOS_BY_ABC,
     SORT_TODOS_BY_ZYX,
-    TODOS_COUNT
+    TODOS_COUNT,
+    SET_CURRENT_PAGE
 } from "./types";
 
 const Initialstate = {
     todos: [],
     toDosCount: null,
     pageSize: 3,
+    currentPage: 1,
     alert: null,
     auth: null,
-    isAuth: 0
+    isAuth: 0,
+    isNamesSorted: null,
+    isEmailSorted: null,
+    isToDoSorted: null,
 }
 
 export const toDosReducer = (state = Initialstate, action) => {
@@ -66,6 +71,11 @@ export const toDosReducer = (state = Initialstate, action) => {
                     return t
                 })
             }
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.currentPage
+            }
         case SHOW_ALERT:
             return {
                 ...state,
@@ -79,56 +89,38 @@ export const toDosReducer = (state = Initialstate, action) => {
         case SORT_NAMES_BY_ABC:
             return {
                 ...state,
-                todos: [ ...state.todos].sort((item1, item2) => {
-                    if (item1.name > item2.name) {
-                        return 1
-                    }
-                    if (item1.name < item2.name) {
-                        return -1
-                    }
-                    return 0
-                })
+                isNamesSorted: 1,
+                isEmailSorted: null,
+                isToDoSorted: null
             }
         case SORT_NAMES_BY_ZYX:
             return {
                 ...state,
-                todos: [ ...state.todos].reverse()
+                isNamesSorted: 0,
             }
         case SORT_EMAILS_BY_ABC:
             return {
                 ...state,
-                todos: [ ...state.todos].sort((item1, item2) => {
-                    if (item1.email > item2.email) {
-                        return 1
-                    }
-                    if (item1.email < item2.email) {
-                        return -1
-                    }
-                    return 0
-                })
+                isNamesSorted: null,
+                isEmailSorted: 1,
+                isToDoSorted: null
             }
         case SORT_EMAILS_BY_ZYX:
             return {
                 ...state,
-                todos: [ ...state.todos].reverse()
+                isEmailSorted: 0,
             }
         case SORT_TODOS_BY_ABC:
             return {
                 ...state,
-                todos: [ ...state.todos].sort((item1, item2) => {
-                    if (item1.todo > item2.todol) {
-                        return 1
-                    }
-                    if (item1.todo < item2.todo) {
-                        return -1
-                    }
-                    return 0
-                })
+                isNamesSorted: null,
+                isEmailSorted: null,
+                isToDoSorted: 1
             }
         case SORT_TODOS_BY_ZYX:
             return {
                 ...state,
-                todos: [ ...state.todos].reverse()
+                isToDoSorted: 0,
             }
 
         default:
